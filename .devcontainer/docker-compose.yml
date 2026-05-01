@@ -1,0 +1,68 @@
+services:
+  graph-ql-preview-api:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    container_name: graph-ql-preview-api-dev
+    user: "1000:1000" # Spuštění kontejneru s UID a GID uživatele hostitele
+
+    volumes:
+      # Mapování celého projektu
+      - ..:/workspace:cached
+      # Named volume pro node_modules (přepíše hostitelský node_modules)
+      - graphql_preview_node_modules:/workspace/node_modules
+
+    command: sleep infinity
+
+    working_dir: /workspace
+
+    # Environment proměnné
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=false
+      - REDIS_HOST=graphql-preview-redis
+      - REDIS_PORT=6379
+      - DB_HOST=graphql-preview-postgres
+      - DB_PORT=5432
+    # Pro interaktivní terminál
+    stdin_open: true
+    tty: true
+    depends_on:
+      - graph-ql-preview-redis
+      - graph-ql-preview-postgres
+
+  graph-ql-preview-redis:
+    image: redis:8-alpine
+    container_name: graph-ql-preview-redis
+    ports:
+      - "6380:6379" # Nestandardní hostitelský port, aby nekolidoval s lokálním Redis
+    volumes:
+      - graphql_preview_redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  graph-ql-preview-postgres:
+    image: postgres:18-alpine
+    container_name: graph-ql-preview-postgres
+    ports:
+      - "5433:5432" # Nestandardní hostitelský port, aby nekolidoval s lokálním PostgreSQL
+    volumes:
+      - graphql_preview_postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=graphql_preview
+      - POSTGRES_PASSWORD=graphql_preview
+      - POSTGRES_DB=graphql_preview
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U graphql_preview" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  graphql_preview_node_modules:
+  graphql_preview_redis_data:
+  graphql_preview_postgres_data:
