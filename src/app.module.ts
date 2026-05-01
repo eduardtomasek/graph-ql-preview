@@ -7,6 +7,7 @@ import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { MainDbModule } from './infrastructure/databases/main-db/main-db.module';
 import { ProductionRedisModule } from './infrastructure/databases/main-redis/main-redis.module';
+import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { ProductionRedisModule } from './infrastructure/databases/main-redis/mai
         }),
         MainDbModule,
         ProductionRedisModule,
+        BootstrapModule,
     ],
     controllers: [AppController],
     providers: [
