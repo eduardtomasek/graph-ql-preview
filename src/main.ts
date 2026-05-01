@@ -10,7 +10,22 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.enableCors({ origin: '*' });
-    app.use(helmet());
+
+    app.use(
+        helmet({
+            contentSecurityPolicy: {
+                directives: {
+                    defaultSrc: ["'self'"],
+                    scriptSrc: ["'self'", 'https:', "'unsafe-inline'"],
+                    scriptSrcElem: ["'self'", 'https:', "'unsafe-inline'"],
+                    styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+                    imgSrc: ["'self'", '', 'https:'],
+                    fontSrc: ["'self'", 'https:', ''],
+                    connectSrc: ["'self'", 'http://localhost:4040'],
+                },
+            },
+        }),
+    );
     app.use(compression());
 
     app.useGlobalInterceptors(
