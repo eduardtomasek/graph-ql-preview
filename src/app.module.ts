@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
+import { MainDbModule } from './infrastructure/databases/main-db/main-db.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { AppService } from './app.service';
             playground: false,
             graphiql: true,
         }),
+        MainDbModule,
     ],
     controllers: [AppController],
     providers: [
