@@ -1,0 +1,41 @@
+{
+    "name": "GraphQL Preview Development Container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "graph-ql-preview-api",
+    "workspaceFolder": "/workspace",
+
+    // Běží jako node uživatel
+    "remoteUser": "node",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "firsttris.vscode-jest-runner",
+                "matthewnespor.vscode-color-identifiers-mode",
+                "streetsidesoftware.code-spell-checker",
+                "streetsidesoftware.code-spell-checker-czech",
+                "igorsbitnev.error-gutters",
+                "leizongmin.node-module-intellisense",
+                "christian-kohler.npm-intellisense",
+                "gerrnperl.outline-map",
+                "gruntfuggly.todo-tree",
+                "redhat.vscode-yaml"
+            ],
+            "settings": {
+                "eslint.validate": ["javascript", "typescript"],
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": "explicit"
+                },
+                "editor.formatOnSave": true,
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "typescript.tsdk": "node_modules/typescript/lib",
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    }
+
+    // Post-create příkaz s npm install
+    // "postCreateCommand": "npm install"
+}
