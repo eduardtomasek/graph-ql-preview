@@ -20,10 +20,6 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=false
-      - REDIS_HOST=graphql-preview-redis
-      - REDIS_PORT=6379
-      - DB_HOST=graphql-preview-postgres
-      - DB_PORT=5432
     # Pro interaktivní terminál
     stdin_open: true
     tty: true
@@ -37,7 +33,7 @@ services:
     ports:
       - "6380:6379" # Nestandardní hostitelský port, aby nekolidoval s lokálním Redis
     volumes:
-      - graphql_preview_redis_data:/data
+      - graph-ql_preview_redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -64,5 +60,5 @@ services:
 
 volumes:
   graphql_preview_node_modules:
-  graphql_preview_redis_data:
+  graph-ql_preview_redis_data:
   graphql_preview_postgres_data:

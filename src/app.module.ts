@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { MainDbModule } from './infrastructure/databases/main-db/main-db.module';
+import { ProductionRedisModule } from './infrastructure/databases/main-redis/main-redis.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { MainDbModule } from './infrastructure/databases/main-db/main-db.module'
             graphiql: true,
         }),
         MainDbModule,
+        ProductionRedisModule,
     ],
     controllers: [AppController],
     providers: [
