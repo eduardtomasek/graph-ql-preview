@@ -4,6 +4,7 @@ import { ProjectionsModule } from '../projections/projections.module';
 import { CardsMapper } from './mappers/cards.mapper';
 import { CardsPgRepository } from './repositories/cards.pg.repository';
 import { CardsResolver } from './resolvers/cards.resolver';
+import { BootstrapCardsService } from './services/bootstrap.cards.service';
 import { CardsService } from './services/cards.service';
 
 @Module({
@@ -12,6 +13,7 @@ import { CardsService } from './services/cards.service';
     providers: [
         // services
         CardsService,
+        BootstrapCardsService,
 
         // repositories
         CardsPgRepository,

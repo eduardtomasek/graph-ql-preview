@@ -16,6 +16,9 @@ export interface CardRow {
     rarity_code: string;
     rarity_name: string;
 
+    set_code: string;
+    set_name: string;
+
     cost: number;
 
     attack: number | null;

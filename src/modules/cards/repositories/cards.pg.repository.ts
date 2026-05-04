@@ -7,7 +7,7 @@ import { CardRow } from '../interfaces/card-row.interface';
 export class CardsPgRepository {
     constructor(@Inject(MAIN_PG_CONNECTION) private readonly db: pgp.IDatabase<any>) {}
 
-    findCardBySlug(slug: string): Promise<CardRow | null> {
+    async findCardBySlug(slug: string): Promise<CardRow | null> {
         return this.db.oneOrNone<CardRow>(
             /* sql */ `
 			SELECT
@@ -21,13 +21,15 @@ export class CardsPgRepository {
 				f.name AS faction_name,
 				r.code AS rarity_code,
 				r.name AS rarity_name,
+				cs.code AS set_code,
+				cs.name AS set_name,
 				c.cost,
-				cs.attack,
-				cs.defense,
-				cs.health,
-				cs.speed,
-				cs.range,
-				cs.armor,
+				css.attack,
+				css.defense,
+				css.health,
+				css.speed,
+				css.range,
+				css.armor,
 				COALESCE(
 					jsonb_agg(
 						DISTINCT jsonb_build_object(
@@ -54,9 +56,9 @@ export class CardsPgRepository {
 				c.image_url,
 				(
 					COALESCE(c.cost, 0) * 0.6
-					+ COALESCE(cs.attack, 0) * 1.2
-					+ COALESCE(cs.defense, 0) * 1.0
-					+ COALESCE(cs.health, 0) * 0.8
+					+ COALESCE(css.attack, 0) * 1.2
+					+ COALESCE(css.defense, 0) * 1.0
+					+ COALESCE(css.health, 0) * 0.8
 				)::numeric(10,2) AS power_score,
 				c.is_collectible,
 				c.is_active,
@@ -65,7 +67,8 @@ export class CardsPgRepository {
 				JOIN card_types ct ON ct.id = c.card_type_id
 				JOIN factions f ON f.id = c.faction_id
 				JOIN rarities r ON r.id = c.rarity_id
-				LEFT JOIN card_combat_stats cs ON cs.card_id = c.id
+				JOIN card_sets cs ON cs.id = c.set_id
+				LEFT JOIN card_combat_stats css ON css.card_id = c.id
 				LEFT JOIN card_tags ctag ON ctag.card_id = c.id
 				LEFT JOIN tags t ON t.id = ctag.tag_id
 				LEFT JOIN card_abilities ca ON ca.card_id = c.id
@@ -79,16 +82,24 @@ export class CardsPgRepository {
 				ct.id,
 				f.id,
 				r.id,
-				cs.card_id,
-				cs.attack,
-				cs.defense,
-				cs.health,
-				cs.speed,
-				cs.range,
-				cs.armor
+				cs.code,
+				cs.name,
+				css.attack,
+				css.defense,
+				css.health,
+				css.speed,
+				css.range,
+				css.armor
+
 			LIMIT 1;
 		`,
             { slug },
         );
+    }
+
+    async findAllCardsSlugs(): Promise<{ slug: string }[]> {
+        return this.db.manyOrNone<{ slug: string }>(/* sql */ `
+			SELECT slug FROM cards WHERE is_active = true;
+		`);
     }
 }

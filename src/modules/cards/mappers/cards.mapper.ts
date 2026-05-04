@@ -21,6 +21,9 @@ export class CardsMapper {
             rarityCode: cardRow.rarity_code,
             rarityName: cardRow.rarity_name,
 
+            setCode: cardRow.set_code,
+            setName: cardRow.set_name,
+
             cost: cardRow.cost,
 
             stats:

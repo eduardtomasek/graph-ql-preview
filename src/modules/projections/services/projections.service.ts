@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectionCardsRepository } from '../repositories/projection-cards.repository';
+import { CardsProjectionsPgRepository } from '../repositories/cards.projections.pg.repository';
 
 @Injectable()
 export class ProjectionsService {
-    constructor(private readonly projectionCardsRepository: ProjectionCardsRepository) {}
+    constructor(private readonly projectionCardsRepository: CardsProjectionsPgRepository) {}
 
     async findBySlug(slug: string) {
         return this.projectionCardsRepository.findBySlug(slug);

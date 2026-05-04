@@ -80,6 +80,12 @@ export class CardModel {
     @Field()
     rarityName: string;
 
+    @Field()
+    setCode: string;
+
+    @Field()
+    setName: string;
+
     @Field(() => Int)
     cost: number;
 
