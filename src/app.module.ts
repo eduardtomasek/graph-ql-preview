@@ -9,6 +9,7 @@ import { MainDbModule } from './infrastructure/databases/main-db/main-db.module'
 import { ProductionRedisModule } from './infrastructure/databases/main-redis/main-redis.module';
 import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 import { CardsModule } from './modules/cards/cards.module';
+import { ProjectionsModule } from './modules/projections/projections.module';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { CardsModule } from './modules/cards/cards.module';
         ProductionRedisModule,
         BootstrapModule,
         CardsModule,
+        ProjectionsModule,
     ],
     controllers: [AppController],
     providers: [

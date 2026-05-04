@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as pgp from 'pg-promise';
 import { MAIN_PG_CONNECTION } from '../../../libs/core/constants';
+import { CardRow } from '../interfaces/card-row.interface';
 
 @Injectable()
 export class CardsPgRepository {
@@ -90,56 +91,4 @@ export class CardsPgRepository {
             { slug },
         );
     }
-}
-
-export interface CardTagRow {
-    code: string;
-    name: string;
-}
-
-export interface CardAbilityRow {
-    code: string;
-    name: string;
-    trigger: string;
-    effect: string;
-    description: string;
-}
-
-export interface CardRow {
-    card_uuid: string;
-    card_code: string;
-    name: string;
-    slug: string;
-
-    type_code: string;
-    type_name: string;
-
-    faction_code: string;
-    faction_name: string;
-
-    rarity_code: string;
-    rarity_name: string;
-
-    cost: number;
-
-    attack: number | null;
-    defense: number | null;
-    health: number | null;
-    speed: number | null;
-    range: number | null;
-    armor: number | null;
-
-    tags: CardTagRow[];
-    abilities: CardAbilityRow[];
-
-    rules_text: string | null;
-    lore_text: string | null;
-    image_url: string | null;
-
-    power_score: string | number; // pg vrací numeric často jako string
-
-    is_collectible: boolean;
-    is_active: boolean;
-
-    updated_at: string | Date;
 }

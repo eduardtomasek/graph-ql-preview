@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ProjectionCardRow } from '../../projections/interfaces/projection-card-row.interface';
+import { CardRow } from '../interfaces/card-row.interface';
 import { CardModel } from '../models/card.model';
-import { CardRow } from '../repositories/cards.pg.repository';
 
 @Injectable()
 export class CardsMapper {
@@ -61,5 +62,9 @@ export class CardsMapper {
             isCollectible: cardRow.is_collectible,
             isActive: cardRow.is_active,
         };
+    }
+
+    projectionCardRowToCardModel(projectionCardRow: ProjectionCardRow): CardModel {
+        return this.cardRowToCardModel(projectionCardRow);
     }
 }
