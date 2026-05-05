@@ -2,6 +2,7 @@
 import { Global, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient } from 'redis';
+import { MAIN_REDIS_CONNECTION } from '../../../libs/core/constants';
 import { redisConnection } from '../../../libs/shared-utils/functions/redis-connection-url';
 
 function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
@@ -15,9 +16,9 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
 @Module({
     providers: [
         {
-            provide: 'REDIS_CLIENT',
+            provide: MAIN_REDIS_CONNECTION,
             useFactory: async (configService: ConfigService) => {
-                const logger = new Logger('REDIS_CLIENT');
+                const logger = new Logger(MAIN_REDIS_CONNECTION);
                 const host = configService.getOrThrow<string>('REDIS_HOST');
                 const port = configService.get<number>('REDIS_PORT') ?? 6379;
 
@@ -50,6 +51,6 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
             inject: [ConfigService],
         },
     ],
-    exports: ['REDIS_CLIENT'],
+    exports: [MAIN_REDIS_CONNECTION],
 })
-export class ProductionRedisModule {}
+export class MainRedisModule {}

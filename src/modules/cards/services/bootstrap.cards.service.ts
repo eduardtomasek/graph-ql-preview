@@ -1,5 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { CardsCacheService } from '../../cache/services/cards.cache.service';
 import { CardsBuilderProjectionsService } from '../../projections/services/cards-builder.projections.service';
+import { ProjectionsService } from '../../projections/services/projections.service';
+import { CardsMapper } from '../mappers/cards.mapper';
 import { CardsPgRepository } from '../repositories/cards.pg.repository';
 
 @Injectable()
@@ -8,7 +11,10 @@ export class BootstrapCardsService {
 
     constructor(
         private readonly cardsBuilderProjectionsService: CardsBuilderProjectionsService,
+        private readonly projectionsService: ProjectionsService,
         private readonly cardsPgRepository: CardsPgRepository,
+        private readonly cardsCacheService: CardsCacheService,
+        private readonly cardsMapper: CardsMapper,
     ) {}
 
     onModuleInit() {
@@ -25,6 +31,16 @@ export class BootstrapCardsService {
     async bootstrapCards() {
         const cardSlugs = await this.cardsPgRepository.findAllCardsSlugs();
 
-        await this.cardsBuilderProjectionsService.buildProjectionCardsDataBySlugs(cardSlugs.map((card) => card.slug));
+        const slugs = cardSlugs.map((card) => card.slug);
+
+        await this.cardsBuilderProjectionsService.buildProjectionCardsDataBySlugs(slugs);
+
+        const projectionsCards = await this.projectionsService.findBySlugs(slugs);
+
+        const cardsDataToCache = projectionsCards.map((projectionCard) =>
+            this.cardsMapper.projectionCardRowToCardModel(projectionCard),
+        );
+
+        await this.cardsCacheService.cacheCardsBySlugs(cardsDataToCache);
     }
 }

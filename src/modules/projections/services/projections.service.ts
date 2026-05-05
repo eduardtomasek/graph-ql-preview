@@ -8,4 +8,8 @@ export class ProjectionsService {
     async findBySlug(slug: string) {
         return this.projectionCardsRepository.findBySlug(slug);
     }
+
+    async findBySlugs(slugs: string[]) {
+        return this.projectionCardsRepository.findBySlugs(slugs);
+    }
 }

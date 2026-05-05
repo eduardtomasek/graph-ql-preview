@@ -6,8 +6,9 @@ import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { MainDbModule } from './infrastructure/databases/main-db/main-db.module';
-import { ProductionRedisModule } from './infrastructure/databases/main-redis/main-redis.module';
+import { MainRedisModule } from './infrastructure/databases/main-redis/main-redis.module';
 import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
+import { CacheModule } from './modules/cache/cache.module';
 import { CardsModule } from './modules/cards/cards.module';
 import { ProjectionsModule } from './modules/projections/projections.module';
 
@@ -24,10 +25,11 @@ import { ProjectionsModule } from './modules/projections/projections.module';
             graphiql: true,
         }),
         MainDbModule,
-        ProductionRedisModule,
+        MainRedisModule,
         BootstrapModule,
         CardsModule,
         ProjectionsModule,
+        CacheModule,
     ],
     controllers: [AppController],
     providers: [
